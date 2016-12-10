@@ -1,0 +1,48 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+
+pkgname='perl-synctl-git'
+pkgver=1.0.2
+pkgrel=3
+pkgdesc="A perl powered backup tool"
+arch=('any')
+url="https://github.com/gauthier-voron/synctl"
+license=('GPL')
+groups=()
+depends=('perl>=5.10.0')
+makedepends=('git' 'perl>=5.10.0' 'make')
+optdepends=('openssh: ssh backend support')
+provides=()
+conflicts=('perl-synctl')
+replaces=()
+backup=()
+options=()
+install=
+source=(
+    "$pkgname::git+https://github.com/gauthier-voron/synctl#branch=develop"
+)
+noextract=()
+md5sums=('SKIP')
+
+build() {
+    rm -rf "../$pkgname"
+    cd "$srcdir/$pkgname"
+
+    PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
+    make
+}
+
+check() {
+    cd "$srcdir/$pkgname"
+    make test
+}
+
+package() {
+    cd "$srcdir/$pkgname"
+
+    make DESTDIR="$pkgdir/" install
+    mkdir -p "$pkgdir/etc/synctl"
+    mkdir -p "$pkgdir/usr/share/synctl/"
+    cp -r "$srcdir/$pkgname/examples" "$pkgdir/usr/share/synctl/"
+}
+
+# vim:set ts=2 sw=2 et:
