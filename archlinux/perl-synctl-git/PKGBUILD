@@ -43,6 +43,7 @@ package() {
     mkdir -p "$pkgdir/etc/synctl"
     mkdir -p "$pkgdir/usr/share/synctl/"
     cp -r "$srcdir/$pkgname/examples" "$pkgdir/usr/share/synctl/"
+    ln -s "vendor_perl/synctl" "$pkgdir/usr/bin/synctl"
 }
 
 # vim:set ts=2 sw=2 et:

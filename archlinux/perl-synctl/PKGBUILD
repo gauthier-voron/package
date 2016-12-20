@@ -1,8 +1,8 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 
 pkgname='perl-synctl'
-pkgver=1.0.1
-pkgrel=1
+pkgver=1.0.2
+pkgrel=2
 pkgdesc="A perl powered backup tool"
 arch=('any')
 url="https://github.com/gauthier-voron/synctl"
@@ -18,7 +18,7 @@ backup=()
 options=()
 install=
 source=(
-    "$pkgname::git+https://github.com/gauthier-voron/synctl#tag=1.0.1"
+    "$pkgname::git+https://github.com/gauthier-voron/synctl#tag=1.0.2"
 )
 noextract=()
 md5sums=('SKIP')
@@ -43,6 +43,7 @@ package() {
     mkdir -p "$pkgdir/etc/synctl"
     mkdir -p "$pkgdir/usr/share/synctl/"
     cp -r "$srcdir/$pkgname/examples" "$pkgdir/usr/share/synctl/"
+    ln -s "vendor_perl/synctl" "$pkgdir/usr/bin/synctl"
 }
 
 # vim:set ts=2 sw=2 et:
