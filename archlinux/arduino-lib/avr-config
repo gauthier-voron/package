@@ -1,0 +1,303 @@
+#!/usr/bin/perl -l
+
+use strict;
+use warnings;
+
+use Getopt::Long qw(GetOptionsFromArray);
+
+
+my $PROGRAM = 'avr-config';
+my $VERSION = '0.1.0';
+my $AUTHOR  = 'Gauthier Voron';
+my $EMAIL   = 'gauthier.voron@mnesic.fr';
+
+my $BOARD   = '/usr/share/arduino/boards.txt';
+my %BDESC   = ();
+
+
+sub error
+{
+    my ($message, $errcode) = @_;
+    my $program = $0;
+
+    if (!defined($message)) {
+	$message = 'undefined error';
+    }
+
+    if (!defined($errcode)) {
+	$errcode = 255;
+    }
+
+    $program =~ s|^.*/(.*)$|$1|;
+    printf(STDERR "%s: %s\n", $program, $message);
+    printf(STDERR "Please type '%s --help' for more information\n", $program);
+
+    exit ($errcode);
+}
+
+sub opterr
+{
+    my ($message) = @_;
+
+    if ($message =~ /^Unknown option: (.*)$/) {
+	error("invalid option '$1'");
+    }
+
+    chomp($message);
+    error($message);
+}
+
+
+sub usage
+{
+    return <<"EOF";
+Usage: avr-config [options] <target> [<subtype>]
+
+Display the configuration information about a given arduino target and subtype,
+if any. For a usage example, see /usr/share/arduino/Makefile.
+
+Options:
+  -h, --help                  Display this help message, then exit.
+
+  -V, --version               Display the version information, then exit.
+
+  -B <path>, --board=<path>   Path to the board description file.
+
+  -s, --subtypes              Display the possible subtypes for the specified
+                              target.
+
+  -c                          Display the flags to use with avr-gcc during a
+                              compilation for the specified target and subtype.
+
+  -cxx                        Display the flags to use with avr-g++ during a
+                              compilation for the specified target and subtype.
+
+  -as                         Display the flags to use with avr-gcc during an
+                              assembling for the specified target and subtype.
+
+  -v, --variant               Display the variant of include to use for the
+                              specified target.
+
+  -m, --mcu                   Display the mcu to use for the specified target
+                              and subtype.
+EOF
+}
+
+sub version
+{
+    return <<"EOF";
+$PROGRAM $VERSION
+$AUTHOR
+$EMAIL
+EOF
+}
+
+
+sub acquire
+{
+    my ($fh, $line, $key, $value);
+    my %bdesc;
+
+    if (!open($fh, '<', $BOARD)) {
+	error("cannot open board description file '$BOARD'");
+    }
+
+    while (defined($line = <$fh>)) {
+	if (!($line =~ /^(.*)=(.*)$/)) {
+	    next;
+	}
+
+	($key, $value) = ($1, $2);
+	$bdesc{$key} = $value;
+    }
+
+    close($fh);
+    %BDESC = %bdesc;
+}
+
+
+sub lookup
+{
+    my (@ids) = @_;
+    my ($key, $value);
+
+    if (scalar(keys(%BDESC)) == 0) {
+	acquire();
+    }
+
+    $key = join('.', grep { defined($_) } @ids);
+    $value = $BDESC{$key};
+
+    return $value;
+}
+
+sub subtypes
+{
+    my ($target) = @_;
+    my (@subtypes, $key);
+
+    if (scalar(keys(%BDESC)) == 0) {
+	acquire();
+    }
+
+    foreach $key (keys(%BDESC)) {
+	if ($key =~ /^$target\.menu\.cpu\.([^.]*)$/) {
+	    push(@subtypes, $1);
+	}
+    }
+
+    return @subtypes;
+}
+
+
+sub archflags
+{
+    my ($target, $subtype) = @_;
+    my (@flags, $key, $value);
+    my %buildvars = (
+	'-mmcu='     => 'mcu',
+	'-DF_CPU='   => 'f_cpu',
+	'-DARDUINO_' => 'board',
+	'-DUSB_VID=' => 'vid',
+	'-DUSB_PID=' => 'pid'
+	);
+
+    foreach $key (keys(%buildvars)) {
+	$value = lookup($target, 'menu', 'cpu', $subtype, 'build',
+			$buildvars{$key});
+
+	if (!defined($value)) {
+	    $value = lookup($target, 'build', $buildvars{$key});
+	}
+
+	if (defined($value)) {
+	    push(@flags, $key . $value);
+	} elsif ($key eq '-mmcu=') {
+	    if (defined($subtype)) {
+		error("cannot find mcu for target '$target:$subtype'");
+	    } else {
+		error("cannot find mcu for target '$target', please look "
+		      . 'for subtypes');
+	    }
+	}
+    }
+
+    return @flags;
+}
+
+sub cflags
+{
+    my ($target, $subtype) = @_;
+    my @common = qw(-Os -ffunction-sections -fdata-sections -mrelax -g2
+                    -gstabs -std=gnu99);
+    return (@common, archflags($target, $subtype));
+}
+
+sub cxxflags
+{
+    my ($target, $subtype) = @_;
+    my @common = qw(-Os -ffunction-sections -fdata-sections -mrelax -g2
+                    -gstabs -std=gnu++0x -fno-use-cxa-atexit);
+    return (@common, archflags($target, $subtype));
+}
+
+sub asflags
+{
+    my ($target, $subtype) = @_;
+    my @common = qw(-x assembler-with-cpp);
+    return (@common, archflags($target, $subtype));
+}
+
+
+sub variant
+{
+    my ($target) = @_;
+    my %variants = (
+	'bt'                 => 'standard',
+	'circuitplay32u4cat' => 'circuitplay32u4',
+	'diecimila'          => 'standard',
+	'esplora'            => 'circuitplay32u4',
+	'ethernet'           => 'ethernet',
+	'fio'                => 'standard',
+	'gemma'              => 'gemma',
+	'lilypad'            => 'standard',
+	'megaADK'            => 'mega',
+	'mega'               => 'mega',
+	'mini'               => 'standard',
+	'micro'              => 'micro',
+	'nano'               => 'standard',
+	'one'                => 'standard',
+	'pro'                => 'standard',
+	'robotControl'       => 'robot_control',
+	'robotMotor'         => 'robot_motor',
+	'uno'                => 'standard',
+	'unowifi'            => 'standard',
+	'yun'                => 'circuitplay32u4',
+	'yunmini'            => 'circuitplay32u4',
+	);
+
+    return $variants{$target};
+}
+
+
+sub main
+{
+    my ($target, $subtype, @err) = @_;
+    my ($subtypes, $cflags, $cxxflags, $asflags, $variant, $mcu);
+
+    $SIG{__WARN__} = \&opterr;
+    Getopt::Long::Configure('no_ignore_case');
+    GetOptionsFromArray(
+	\@_,
+	'h|help'     => sub { printf("%s", usage());   exit (0); },
+	'V|version'  => sub { printf("%s", version()); exit (0); },
+	'B|board=s'  => \$BOARD,
+	's|subtypes' => \$subtypes,
+	'c'          => \$cflags,
+	'cxx'        => \$cxxflags,
+	'as'         => \$asflags,
+	'v|variant'  => \$variant,
+	'm|mcu'      => \$mcu
+	);
+    $SIG{__WARN__} = undef;
+
+    ($target, $subtype, @err) = @_;
+
+    if (!defined($target)) {
+	error('missing target operand');
+    } elsif (@err) {
+	error("unexpected operand '" . shift(@err) . "'");
+    }
+
+    if ($subtypes) {
+	printf("%s\n", join(' ', subtypes($target)));
+    }
+
+    if ($cflags) {
+	printf("%s\n", join(' ', cflags($target, $subtype)));
+    }
+    if ($cxxflags) {
+	printf("%s\n", join(' ', cxxflags($target, $subtype)));
+    }
+    if ($asflags) {
+	printf("%s\n", join(' ', asflags($target, $subtype)));
+    }
+
+    if ($variant) {
+	printf("%s\n", variant($target));
+    }
+
+    if ($mcu) {
+	if (defined($subtype)) {
+	    printf("%s\n", lookup($target, 'menu', 'cpu', $subtype,
+				  'build', 'mcu'));
+	} else {
+	    printf("%s\n", lookup($target, 'build', 'mcu'));
+	}
+    }
+
+    return 0;
+}
+
+exit (main(@ARGV));
+__END__

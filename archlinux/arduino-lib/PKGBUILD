@@ -1,0 +1,107 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='arduino-lib'
+pkgver='1.8.1'
+pkgrel=1
+epoch=
+pkgdesc="A minimal arduino development toolset"
+arch=('x86_64')
+url=""
+license=('GPL')
+groups=()
+depends=()
+makedepends=('avr-binutils' 'avr-gcc' 'avr-libc')
+checkdepends=()
+optdepends=('avr-binutils: arduino program compilation'
+	    'avr-gcc: arduino program compilation'
+	    'avr-libc: arduino program compilation'
+	    'avrdude: arduino program uploading')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=('!strip')
+install=
+changelog=
+source=('arduino.zip::https://github.com/arduino/Arduino/archive/1.8.1.zip'
+	'Makefile'
+	'Command.mk'
+	'Function.mk'
+	'Arduino.mk'
+	'avr-config')
+noextract=()
+md5sums=('477dea97e193907bfad737f987a90f12'
+	 '36a9054042290c2aab535834cded7ff6'
+	 'ffe98eeeb0a79781e54081a16bceb461'
+	 '8159f3462ea300415cd8f390557b6c2b'
+	 '959033bfd6e00f13080a849ffb272c88'
+	 '80e670585b3e2d831b0313f0ae10e0c7')
+validpgpkeys=()
+
+prepare() {
+    # Copy the sources in a unique directory
+    mkdir src
+    for d in cores/arduino libraries ; do
+	for f in `find "Arduino-$pkgver/hardware/arduino/avr/$d" \
+                  -name "*.[cS]*"` ; do
+	    cp "$f" src
+	done
+    done
+
+    # Copy the common includes in a unique directory
+    mkdir include
+    for d in cores/arduino libraries ; do
+	for f in `find "Arduino-$pkgver/hardware/arduino/avr/$d" \
+                  -name "*.h"` ; do
+	    cp "$f" include
+	done
+    done
+
+    # Copy the variant headers in a dedicated directory
+    cp -R "Arduino-$pkgver/hardware/arduino/avr/variants" include
+
+    # Special case for the twi.h header which is accessed differently by
+    # different sources
+    mkdir include/utility
+    cp include/twi.h include/utility/twi.h
+}
+
+build() {
+    boards="Arduino-$pkgver/hardware/arduino/avr/boards.txt"
+
+    for target in bt circuitplay32u4cat diecimila esplora ethernet fio \
+		  lilypad megaADK mega micro mini nano pro uno unowifi \
+		  yunmini yun ; do
+	subcount=0
+	for subtype in `./avr-config -B "$boards" -s $target` ; do
+	    make TARGET=$target SUBTYPE=$subtype BOARDS="$boards"
+	    subcount=1
+	done
+
+	if [ $subcount -eq 0 ] ; then
+	    make TARGET=$target BOARDS="$boards"
+	fi
+    done
+}
+
+package() {
+    version=`avr-gcc --version | head -n 1 | cut -d' ' -f3`
+
+    mkdir "$pkgdir/usr"
+    mkdir "$pkgdir/usr/include"
+    cp -R include "$pkgdir/usr/include/arduino"
+
+    mkdir "$pkgdir/usr/lib"
+    mkdir "$pkgdir/usr/lib/gcc"
+    mkdir "$pkgdir/usr/lib/gcc/avr"
+    mkdir "$pkgdir/usr/lib/gcc/avr/$version"
+    cp lib/*.a "$pkgdir/usr/lib/gcc/avr/$version"
+
+    mkdir "$pkgdir/usr/bin"
+    cp "avr-config" "$pkgdir/usr/bin"
+
+    mkdir "$pkgdir/usr/share"
+    mkdir "$pkgdir/usr/share/arduino"
+    cp "Arduino-$pkgver/hardware/arduino/avr/boards.txt" \
+       "$pkgdir/usr/share/arduino"
+    cp "Arduino.mk" "$pkgdir/usr/share/arduino/Makefile"
+}
