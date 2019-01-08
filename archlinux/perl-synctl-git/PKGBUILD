@@ -1,8 +1,8 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 
 pkgname='perl-synctl-git'
-pkgver=1.0.2
-pkgrel=3
+pkgver=r3.36c76bf
+pkgrel=1
 pkgdesc="A perl powered backup tool"
 arch=('any')
 url="https://github.com/gauthier-voron/synctl"
@@ -11,17 +11,21 @@ groups=()
 depends=('perl>=5.10.0')
 makedepends=('git' 'perl>=5.10.0' 'make')
 optdepends=('openssh: ssh backend support')
-provides=()
+provides=('perl-synctl')
 conflicts=('perl-synctl')
 replaces=()
 backup=()
 options=()
 install=
 source=(
-    "$pkgname::git+https://github.com/gauthier-voron/synctl#branch=develop"
+    "$pkgname::git+https://github.com/gauthier-voron/synctl-perl#branch=develop"
 )
 noextract=()
 md5sums=('SKIP')
+
+pkgver() {
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
 
 build() {
     rm -rf "../$pkgname"
