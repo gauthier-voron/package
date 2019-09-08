@@ -5,7 +5,21 @@ REPOSITORY := mnesic
 # Name of the packages to build.
 # These must be names of the directories containing a PKGBUILD file.
 #
-PACKAGES   := perl-synctl
+PACKAGES += config-audio
+PACKAGES += config-desktop
+PACKAGES += config-devel
+PACKAGES += config-graphic
+PACKAGES += config-multimedia
+PACKAGES += ec2tools
+PACKAGES += emacs-go-mode
+PACKAGES += emacs-kotlin-mode
+PACKAGES += homectl
+PACKAGES += perl-synctl
+PACKAGES += setup-laurier
+PACKAGES += setup-orme
+PACKAGES += setup-qemu
+PACKAGES += synctl-git
+PACKAGES += xmde-git
 
 # URL of the server to push the repository as well as the path inside the
 # server.
@@ -106,7 +120,8 @@ push: $(REPOSITORY).db.tar.gz $(REPOSITORY).db $(REPOSITORY).files.tar.gz \
 #
 
 $(REPOSITORY).db.tar.gz: $(package-files)
-	$(call cmd-print,  ADD     $(strip $@))
+	$(call cmd-print,  MKREPO  $(strip $@))
+	$(Q)rm $@ 2> /dev/null || true
 	$(Q)repo-add -q $@ $^
 
 $(REPOSITORY).db: $(REPOSITORY).db.tar.gz
@@ -124,13 +139,13 @@ $(REPOSITORY).files: $(REPOSITORY).db.tar.gz
 
 ifeq ($(V),2)
   %.pkg.tar.xz:
-	cd $(dir $@) && makepkg
+	cd $(dir $@) && makepkg -f
 else
   %.pkg.tar.xz:
 	$(call cmd-print,  MAKEPKG $@)
 	@cd $(dir $@) && \
          log="$$(mktemp --suffix='.log' 'makepkg.XXXXXXXXXX')" ; \
-         if makepkg > "$$log" 2>&1 ; then \
+         if makepkg -f > "$$log" 2>&1 ; then \
            rm "$$log" ; \
          else \
            cat "$$log" ; \

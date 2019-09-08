@@ -1,0 +1,44 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='config-desktop'
+pkgver=1.2
+pkgrel=1
+pkgdesc="Minimal configuration for desktop environment"
+arch=('any')
+url=""
+license=('unknown')
+groups=('config-laurier' 'config-orme' 'config-qemu')
+depends=('at' 'android-file-transfer'
+	 'bc'
+	 'cronie'
+	 'dialog'
+	 'grml-zsh-config'
+	 'homectl' 'htop'
+	 'iotop'
+	 'keepassxc'
+	 'lshw' 'lsof'
+	 'mlocate'
+	 'ntfs-3g'
+	 'openssh'
+	 'rsync'
+	 'sshfs' 'sudo'
+	 'unzip'
+	 'wget'
+	 'zip' 'zsh')
+install="$pkgname.install"
+source=('autologin@.service'
+	'privileged-users'
+	'system-commands')
+md5sums=('40571cc1a47fa0b0048eadb2be766d64'
+	 'edc597dfff8031da7c3c84732db9d4f2'
+	 '3f5d1be9431f6b10ce028dbba81b6e6d')
+
+package() {
+    install -o 0 -g 0 -d -m750 "$pkgdir/etc/sudoers.d"
+    cp "$srcdir/privileged-users" "$pkgdir/etc/sudoers.d/privileged-users"
+    cp "$srcdir/system-commands" "$pkgdir/etc/sudoers.d/system-commands"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/usr/lib/systemd/system"
+    for file in 'autologin@.service' ; do
+	install -m644 "$srcdir/$file" "$pkgdir/usr/lib/systemd/system/$file"
+    done
+}

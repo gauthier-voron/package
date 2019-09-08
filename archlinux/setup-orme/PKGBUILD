@@ -1,0 +1,24 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='setup-orme'
+pkgver=1.1
+pkgrel=1
+pkgdesc="Additional configuration specific to Orme"
+arch=('any')
+url=""
+license=('unknown')
+groups=('config-orme')
+depends=()
+source=('10-keyboard.conf' 'screen.conf')
+md5sums=('SKIP' 'SKIP')
+
+package() {
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc"
+    echo 'Orme' > "$pkgdir/etc/hostname"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/xmde"
+    install -m644 "$srcdir/screen.conf" "$pkgdir/etc/xmde/screen.conf"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/X11/xorg.conf.d"
+    install -m644 "$srcdir/10-keyboard.conf" \
+	    "$pkgdir/etc/X11/xorg.conf.d/10-keyboard.conf"
+}

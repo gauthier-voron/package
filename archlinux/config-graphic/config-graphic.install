@@ -1,0 +1,4 @@
+post_install() {
+    # Setup screen lock on suspend
+    systemctl enable suspend.service
+}

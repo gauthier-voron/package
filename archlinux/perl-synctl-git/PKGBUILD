@@ -1,11 +1,11 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 
 pkgname='perl-synctl-git'
-pkgver=r3.36c76bf
+pkgver=r4.3630c2e
 pkgrel=1
 pkgdesc="A perl powered backup tool"
 arch=('any')
-url="https://github.com/gauthier-voron/synctl"
+url="https://github.com/gauthier-voron/synctl-perl"
 license=('GPL')
 groups=()
 depends=('perl>=5.10.0')

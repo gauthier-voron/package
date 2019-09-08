@@ -1,0 +1,35 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='xmde-git'
+pkgver=r13.6c35c8c
+pkgrel=1
+pkgdesc="XMonad Desktop Environment"
+arch=('any')
+url="https://github.com/gauthier-voron/xmde"
+license=('GPL')
+groups=()
+depends=('bash' 'dmenu' 'feh' 'imagemagick' 'perl' 'physlock' 'rxvt-unicode'
+	 'transset-df' 'ttf-liberation' 'xcompmgr' 'xmobar' 'xmonad'
+	 'xmonad-contrib' 'xorg-server' 'xorg-xinit' 'xorg-xinput'
+	 'xorg-xprop' 'xorg-xrandr' 'xorg-xset' 'xorg-xsetroot')
+makedepends=('git')
+optdepends=('alsa-utils: volume control support' 'scrot: screenshot support')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=('xmde::git+'"$url"'.git#branch=develop')
+noextract=()
+md5sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/${pkgname%-git}"
+
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+    cd "$srcdir/xmde"
+    ./install.sh -p "$pkgdir" -u '/etc/skel'
+}

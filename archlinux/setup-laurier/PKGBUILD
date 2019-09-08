@@ -1,0 +1,37 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='setup-laurier'
+pkgver=1.2
+pkgrel=1
+pkgdesc="Additional configuration specific to Laurier"
+arch=('any')
+url=""
+license=('unknown')
+groups=('config-laurier')
+depends=('terminus-font')
+source=('10-keyboard.conf'
+	'90-no-touchscreen.conf'
+	'screen.conf'
+	'xmde-screen-resolution')
+md5sums=('2e87470dd37e34d2f9445848c3bfb118'
+	 'a52111ddfe326e96ffb0a08855f48fca'
+	 'fdfbc0c74296db4cc3f3ceee44b0290b'
+	 '02bf3e7de05e2402f66194a5ed4deefc')
+
+package() {
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc"
+    echo 'FONT=ter-132n' > "$pkgdir/etc/vconsole.conf"
+    echo 'Laurier' > "$pkgdir/etc/hostname"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/xmde"
+    install -m644 "$srcdir/screen.conf" "$pkgdir/etc/xmde/screen.conf"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/xmde/xinitrc.d"
+    install -m755 "$srcdir/xmde-screen-resolution" \
+	    "$pkgdir/etc/xmde/xinitrc.d/50-screen-resolution.sh"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/X11/xorg.conf.d"
+    install -m644 "$srcdir/10-keyboard.conf" \
+	    "$pkgdir/etc/X11/xorg.conf.d/10-keyboard.conf"
+    install -m644 "$srcdir/90-no-touchscreen.conf" \
+	    "$pkgdir/etc/X11/xorg.conf.d/90-no-touchscreen.conf"
+}
