@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='xmde-git'
-pkgver=r13.6c35c8c
+pkgver=r15.f178c32
 pkgrel=1
 pkgdesc="XMonad Desktop Environment"
 arch=('any')

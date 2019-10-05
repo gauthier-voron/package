@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-graphic'
-pkgver=1.1
+pkgver=1.2
 pkgrel=1
 pkgdesc="Graphical configuration for desktop environment"
 arch=('any')
@@ -12,11 +12,13 @@ install="$pkgname.install"
 source=('archlinux-wallpaper-1366x768.png'
 	'archlinux-wallpaper-1920x1080.png'
 	'archlinux-wallpaper-1920x1200.png'
+	'xmde-cursor-name'
 	'xmde-wallpaper'
 	'zprofile')
 md5sums=('7029f75bd940f8c883791f2109a4125e'
 	 '8df24a7cec25b6699fe945fd4446961a'
 	 'bd0a3fadcc84555bc7b3022d301d24c4'
+	 '6853e6a2e2deb4b180d06e86ec7cd1b0'
 	 '991ff0619e3b08089f7d214f3ae7b68f'
 	 'ab5a5566ff7b143a66bb5eb18dddf76b')
 
@@ -33,6 +35,8 @@ package() {
     done
 
     install -o 0 -g 0 -d -m755 "$pkgdir/etc/xmde/xinitrc.d"
+    install -m755 "$srcdir/xmde-cursor-name" \
+	    "$pkgdir/etc/xmde/xinitrc.d/90-cursor-name.sh"
     install -m755 "$srcdir/xmde-wallpaper" \
 	    "$pkgdir/etc/xmde/xinitrc.d/90-wallpaper.sh"
 }
