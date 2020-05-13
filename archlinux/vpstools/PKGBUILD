@@ -1,0 +1,27 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='vpstools'
+pkgver=1.0.0
+pkgrel=2
+pkgdesc="Useful scripts to manage a server"
+arch=('any')
+url="https://github.com/gauthier-voron/vpstools"
+license=('GPL')
+groups=()
+depends=()
+makedepends=('git')
+optdepends=('perl' 'mariadb')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=('vpstools::git+'"$url"'.git#tag=1.0.0')
+noextract=()
+md5sums=('SKIP')
+
+package() {
+    install -o 0 -g 0 -d -m755 "$pkgdir/usr/bin"
+
+    install -m755 "$srcdir/vpstools/wpctl" "$pkgdir/usr/bin/wpctl"
+}

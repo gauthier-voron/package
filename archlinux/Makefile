@@ -21,6 +21,7 @@ PACKAGES += setup-laurier
 PACKAGES += setup-orme
 PACKAGES += setup-qemu
 PACKAGES += synctl-git
+PACKAGES += vpstools
 PACKAGES += xmde-git
 
 # URL of the server to push the repository as well as the path inside the
