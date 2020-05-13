@@ -30,7 +30,8 @@ PACKAGES += xmde-git
 
 # URL of the server to push the repository as well as the path inside the
 # server.
-SERVER     := www.mnesic.fr:/srv/www/mnesic.fr/files/archlinux/mnesic/x86_64
+SERVERPATH := /srv/http/pkg.gauthiervoron.net/archlinux/x86_64
+SERVER     := package@pkg.gauthiervoron.net:$(SERVERPATH)
 
 
 # Be sure that in case of reccursive call, we do not make anoying printings.
