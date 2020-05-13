@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='setup-laurier'
-pkgver=1.3
+pkgver=1.4
 pkgrel=1
 pkgdesc="Additional configuration specific to Laurier"
 arch=('any')
@@ -16,7 +16,7 @@ source=('10-keyboard.conf'
 md5sums=('2e87470dd37e34d2f9445848c3bfb118'
 	 'c5a1d3944c92241ff6bc2c4ad9a26748'
 	 'a52111ddfe326e96ffb0a08855f48fca'
-	 'fdfbc0c74296db4cc3f3ceee44b0290b'
+	 'b847176254ffa713ea207b63ca763f95'
 	 '02bf3e7de05e2402f66194a5ed4deefc')
 
 package() {
