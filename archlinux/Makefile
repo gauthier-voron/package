@@ -1,3 +1,7 @@
+DEP := .depends.d/
+OBJ := .build.d/
+
+
 # Name of the repository file to build
 #
 REPOSITORY := mnesic
@@ -45,18 +49,20 @@ ifeq ($(V),1)
     @echo '$(1)'
   endef
 endif
-ifneq ($(V),2)
+ifeq ($(V),2)
+  F := --verbose
+else
   Q := @
 endif
 
 
 # Selection on the Makefile mode based on its goals.
-# Only in build mode, we need to generate and include '.package-files.mk'. This
+# Only in build mode, we need to generate and include '.depends.mk'. This
 # file contains the paths of the actual package files to generate (the ones
 # ending with a '.pkg.tar.xz') and their dependencies.
 #
 
-config-goals := .package-files.% clean
+config-goals := %.mk clean cleanall
 
 ifeq ($(filter $(config-goals), $(MAKECMDGOALS)),)
   mode := build
@@ -85,11 +91,11 @@ ifeq ($(mode),mixed)
 else
 
 
-# Puth this default rule in first position so it is the default rule.
-# Other rules, like 'all' need to be put after the '.package-files.mk' because
-# they rely on some variables defined inside.
-# However, '.package-files.mk' also define rules and we do not want them to be
-# the default ones.
+# Put this default rule in first position so it is the default rule.
+# Other rules, like 'all' need to be put after the '.depends.mk' because they
+# rely on some variables defined inside.
+# However, '.depends.mk' also define rules and we do not want them to be the
+# default ones.
 #
 
 default: all
@@ -100,11 +106,20 @@ default: all
 #
 
 ifeq ($(mode),build)
-  -include .package-files.mk
+  -include .depends.mk
 endif
 
 
+# Build the complete package database.
+# This database depends on the actual package files.
+#
+
 all: $(REPOSITORY).db.tar.gz
+
+
+# Push the database and the package files to the remote server.
+# Use hard links and rsync to make the push.
+#
 
 push: $(REPOSITORY).db.tar.gz $(REPOSITORY).db $(REPOSITORY).files.tar.gz \
       $(REPOSITORY).files $(package-files)
@@ -134,65 +149,85 @@ $(REPOSITORY).files.tar.gz: $(REPOSITORY).db.tar.gz
 $(REPOSITORY).files: $(REPOSITORY).db.tar.gz
 
 
-# Generation of package files.
-# The makepkg command does not have any quiet mode which forces us to intercept
-# its stdout / stderr into a log file and only if the makepkg commad fails, to
-# display the log.
+
+# Generage the actual package.
+# This is where the build() and package() functions of a PKGBUILD are called.
+# The dependencies are defined in .depends.mk
 #
 
-ifeq ($(V),2)
-  %.pkg.tar.xz:
-	cd $(dir $@) && makepkg -f
-else
-  %.pkg.tar.xz:
+$(package-files): %.pkg.tar.xz:
 	$(call cmd-print,  MAKEPKG $@)
-	@cd $(dir $@) && \
-         log="$$(mktemp --suffix='.log' 'makepkg.XXXXXXXXXX')" ; \
-         if makepkg -f > "$$log" 2>&1 ; then \
-           rm "$$log" ; \
-         else \
-           cat "$$log" ; \
-           rm  "$$log" ; \
-           false ; \
-         fi
-endif
+	$(Q)./Makepkg $(F) $(dir $@) -frs --noextract
 
 
-# Generation of '.package-files.mk'
-# Standard dependencies generation, thanks to makepkg --packagelist.
+# Copy the package directory from the source to a $(OBJ) copy.
+# The package generation can create several files in the PKGBUILD directory.
+# There is no easy way to track which files are generated and which files are
+# sources.
+# The first step is then to copy the clean sources to a $(OBJ) copy and to
+# call makepkg only on this copy.
+#
+# Call makepkg to get the sources at this step.
+# The source may be necessary to know the package version (in case of VCS
+# package).
 #
 
-.package-files.mk:
-	$(call cmd-print,  CAT     $@)
+$(OBJ)%.build/PKGBUILD:
+	$(call cmd-print,  CP      $(strip $@))
+	$(Q)rm -rf $(dir $@) 2> '/dev/null' || true
+	$(Q)cp -R $(dir $<) $(dir $@)
+	$(call cmd-print,  FETCH   $(strip $(dir $@)))
+	$(Q)./Makepkg $(F) $(dir $@) -frs --nobuild
+
+
+# Generate a dependency from the fetched source.
+# The filename of this package depends on the package version, and thus, on the
+# fetched sources.
+# Also add the package name in the package-list variable.
+#
+
+$(DEP)%.mk: $(OBJ)%.build/PKGBUILD | $(DEP)
+	$(call cmd-print,  DEP     $(strip $@))
+	$(Q)(cd $(dir $<) && makepkg --packagelist) | grep '.pkg.tar.xz$$' | \
+         while read path ; do \
+             path="$${path#$(PWD)/}" ; \
+             odir="$(patsubst $(OBJ)%.build/PKGBUILD, %, $<)" ; \
+             echo "$$path: \$$(wildcard $${odir}/*)" ; \
+             echo "package-files += $$path" ; \
+         done > $@
+
+
+# Aggregate all the $(DE)*.mk files into a single .mk file.
+#
+
+.depends.mk:
+	$(call cmd-print,  CAT     $(strip $@))
 	$(Q)cat $^ > $@
 
-.package-files.d:
-	$(call cmd-print,  MKDIR   $@)
+
+# Generate the dependency rules for $(OBJ) copy build directories.
+# A build directory depends on all the source files located in the package
+# directory.
+#
+
+define PACKAGE-TEMPLATE
+
+  $$(OBJ)$(strip $(1)).build/PKGBUILD: $(strip $(1))/PKGBUILD \
+                                       $$(wildcard $(strip $(1))/*) \
+                                     | $$(OBJ)
+
+  .depends.mk: $$(DEP)$(strip $(1)).mk
+
+endef
+
+$(foreach package, $(PACKAGES), \
+  $(eval $(call PACKAGE-TEMPLATE, $(package))))
+
+
+
+$(DEP) $(OBJ):
+	$(call cmd-print,  MKDIR   $(strip $@))
 	$(Q)mkdir $@
-
-define PACKAGE-SOURCES
-  $(foreach p, $(1), \
-    $(filter-out $(addprefix $(strip $(p))/, src pkg %.pkg.tar.xz), \
-      $(wildcard $(strip $(p))/*)))
-endef
-
-define PACKAGE-FILES-MK-PATTERN
-  .package-files.mk: .package-files.d/$(strip $(1)).mk
-
-  .package-files.d/$(strip $(1)).mk: $(call PACKAGE-SOURCES, $(1)) \
-                                   | .package-files.d
-	$(call cmd-print,  DEP     $$@)
-	$(Q)(cd $(1) && makepkg --packagelist) | while read path ; do \
-            path="$$$${path#$(PWD)/}" ; \
-            printf "%s: %s\n" "$$$$path" "$$^" ; \
-            echo ; \
-            printf "package-files += %s\n" "$$$$path" ; \
-            echo ; \
-        done > $$@
-endef
-
-$(foreach p, $(PACKAGES), \
-  $(eval $(call PACKAGE-FILES-MK-PATTERN, $(p))))
 
 
 # Clean rule
@@ -201,14 +236,20 @@ $(foreach p, $(PACKAGES), \
 
 clean:
 	$(call cmd-print,  CLEAN)
-	$(Q)rm -rf .package-files.mk .package-files.d \
-           $(patsubst %, %/src, $(PACKAGES)) \
-           $(patsubst %, %/pkg, $(PACKAGES)) \
-           $(wildcard $(patsubst %, %/*.pkg.tar.xz, $(PACKAGES))) \
-           $(REPOSITORY).db $(REPOSITORY).db.tar.gz \
-           $(REPOSITORY).files $(REPOSITORY).files.tar.gz
+	$(Q)rm $(REPOSITORY).db $(REPOSITORY).db.tar.gz \
+               $(REPOSITORY).files $(REPOSITORY).files.tar.gz \
+               $(REPOSITORY).files.tar.gz.old \
+            2> /dev/null || true
+
+cleanall:
+	$(call cmd-print,  CLEAN)
+	$(Q)rm -rf .depends.mk $(OBJ) $(DEP) \
+               $(REPOSITORY).db $(REPOSITORY).db.tar.gz \
+               $(REPOSITORY).files $(REPOSITORY).files.tar.gz \
+               $(REPOSITORY).files.tar.gz.old \
+            2> /dev/null || true
 
 
-.PHONY: default all push clean
+.PHONY: default all push clean cleanall
 
 endif
