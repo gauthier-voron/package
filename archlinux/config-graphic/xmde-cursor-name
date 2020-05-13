@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+#   Set the default cursor shape for XMonad Desktop Environment.
+#   Define the cursor as the X11 left_ptr shape. This avoid to have the ugly
+#   black cross when the cursor is above no window.
+#
+
+xsetroot -cursor_name 'left_ptr'

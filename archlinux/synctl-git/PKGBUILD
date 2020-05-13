@@ -1,0 +1,49 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+
+pkgname='synctl-git'
+pkgver=vcs
+pkgrel=1
+pkgdesc="A file backup and synchronization tool"
+arch=('any')
+url="https://github.com/gauthier-voron/synctl"
+license=('GPL')
+groups=()
+depends=('openssl' 'pcre2')
+makedepends=('gcc' 'git' 'make' 'openssl' 'pcre2')
+optdepends=('openssh: ssh backend support')
+provides=('synctl')
+conflicts=('synctl')
+replaces=()
+backup=()
+options=()
+install=
+source=(
+    "$pkgname::git+https://github.com/gauthier-voron/synctl#branch=develop"
+)
+noextract=()
+md5sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/$pkgname"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "$srcdir/$pkgname"
+    make
+}
+
+check() {
+    cd "$srcdir/$pkgname"
+    make test
+}
+
+package() {
+    cd "$srcdir/$pkgname"
+
+    make install PREFIX="$pkgdir/"
+    mkdir -p "$pkgdir/usr/share/license/synctl"
+    cp "$srcdir/$pkgname/COPYING" "$pkgdir/usr/share/license/synctl/COPYING"
+}
+
+# vim:set ts=2 sw=2 et:

@@ -1,0 +1,46 @@
+# Maintainer: Gauthier <gauthier.voron@sydney.edu.au>
+pkgname='ec2tools'
+pkgver=2.1.1
+pkgrel=1
+pkgdesc="Easy manipulation of AWS EC2 instances from shell"
+arch=('x86_64')
+url="https://hades.it.usyd.edu.au/gauthier/ec2tools"
+license=('unknown')
+groups=()
+depends=('openssh')
+makedepends=('git' 'go')
+provides=('ec2tools')
+conflicts=('ec2tools')
+replaces=()
+backup=()
+options=()
+install=
+source=('ec2tools::git+https://hades.it.usyd.edu.au/gauthier/ec2tools.git#tag=v2.1.1')
+noextract=()
+md5sums=('SKIP')
+
+prepare() {
+    cd "$srcdir/ec2tools"
+
+    echo >> 'Makefile'
+    echo '.NOTPARALLEL:' >> 'Makefile'
+}
+
+build() {
+    cd "$srcdir/ec2tools"
+    make all
+}
+
+# Disabled as it is not fully automatic.
+#
+# check() {
+#     cd "$srcdir/ec2tools"
+#     make check
+# }
+
+package() {
+    cd "$srcdir/ec2tools"
+
+    install -d -o 0 -g 0 -m 755 "$pkgdir/usr/bin"
+    install -o 0 -g 0 -m 755 'ec2tools' "$pkgdir/usr/bin/ec2tools"
+}

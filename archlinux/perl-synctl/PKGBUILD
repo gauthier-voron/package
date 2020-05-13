@@ -5,7 +5,7 @@ pkgver=1.0.3
 pkgrel=1
 pkgdesc="A perl powered backup tool"
 arch=('any')
-url="https://github.com/gauthier-voron/synctl"
+url="https://github.com/gauthier-voron/synctl-perl"
 license=('GPL')
 groups=()
 depends=('perl>=5.10.0')

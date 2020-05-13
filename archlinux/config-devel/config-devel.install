@@ -1,0 +1,11 @@
+post_install() {
+    # Setup EDITOR environment variable if not set yet
+    if ! grep -Pq '^(export\s+)?EDITOR=' '/etc/skel/zshrc.local' ; then
+	{
+	    echo
+	    printf "# Setup default EDITOR\n"
+	    printf "#\n"
+	    printf "export EDITOR=emacs"
+	} >> '/etc/skel/zshrc.local'
+    fi
+}

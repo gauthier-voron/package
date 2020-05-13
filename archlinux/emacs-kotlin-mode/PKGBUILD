@@ -1,0 +1,31 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='emacs-kotlin-mode-git'
+pkgver=vcs
+pkgrel=1
+pkgdesc="Kotlin mode package for Emacs"
+arch=('any')
+url="https://github.com/Emacs-Kotlin-Mode-Maintainers/kotlin-mode"
+license=('unknown')
+groups=()
+depends=()
+makedepends=('git')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=("$pkgname::git+${url}#branch=master")
+noextract=()
+md5sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/$pkgname"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+    install -o 0 -g 0 -m755 -d "$pkgdir/usr/share/emacs/site-lisp/"
+    install -o 0 -g 0 -m644 "$srcdir/$pkgname/kotlin-mode.el" \
+	    "$pkgdir/usr/share/emacs/site-lisp/kotlin-mode.el"
+}

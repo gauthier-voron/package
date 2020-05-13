@@ -1,0 +1,44 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='config-graphic'
+pkgver=1.4
+pkgrel=1
+pkgdesc="Graphical configuration for desktop environment"
+arch=('any')
+url=""
+license=('unknown')
+groups=('config-bouleau' 'config-laurier' 'config-orme' 'config-qemu')
+depends=('xmde')
+install="$pkgname.install"
+source=('archlinux-wallpaper-1366x768.png'
+	'archlinux-wallpaper-1920x1080.png'
+	'archlinux-wallpaper-1920x1200.png'
+	'xmde-cursor-name'
+	'xorg-screensaver'
+	'zprofile')
+md5sums=('7029f75bd940f8c883791f2109a4125e'
+	 '8df24a7cec25b6699fe945fd4446961a'
+	 'bd0a3fadcc84555bc7b3022d301d24c4'
+	 '6853e6a2e2deb4b180d06e86ec7cd1b0'
+	 '65cd350cc4054a8cfde64e2c2e7e00d8'
+	 'ab5a5566ff7b143a66bb5eb18dddf76b')
+
+package() {
+    install -d -m755 "$pkgdir/etc/skel"
+    install -m644 "$srcdir/zprofile" "$pkgdir/etc/skel/.zprofile"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/usr/share/wallpaper"
+    for wallpaper in 'archlinux-wallpaper-1366x768.png' \
+			 'archlinux-wallpaper-1920x1080.png' \
+			 'archlinux-wallpaper-1920x1200.png' ; do
+	install -m644 "$srcdir/$wallpaper" \
+		"$pkgdir/usr/share/wallpaper/$wallpaper"
+    done
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/xmde/xinitrc.d"
+    install -m755 "$srcdir/xmde-cursor-name" \
+	    "$pkgdir/etc/xmde/xinitrc.d/90-cursor-name.sh"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/X11/xorg.conf.d"
+    install -m644 "$srcdir/xorg-screensaver" \
+	    "$pkgdir/etc/X11/xorg.conf.d/70-screensaver.conf"
+}
