@@ -1,7 +1,7 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 
 pkgname='perl-synctl-git'
-pkgver=r4.3630c2e
+pkgver=vcs
 pkgrel=1
 pkgdesc="A perl powered backup tool"
 arch=('any')

@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='emacs-kotlin-mode-git'
-pkgver=r123.d6720fe
+pkgver=vcs
 pkgrel=1
 pkgdesc="Kotlin mode package for Emacs"
 arch=('any')
