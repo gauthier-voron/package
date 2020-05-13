@@ -14,6 +14,7 @@ PACKAGES += ec2tools
 PACKAGES += emacs-go-mode
 PACKAGES += emacs-kotlin-mode
 PACKAGES += homectl
+PACKAGES += pacmerge
 PACKAGES += perl-synctl
 PACKAGES += setup-bouleau
 PACKAGES += setup-laurier
