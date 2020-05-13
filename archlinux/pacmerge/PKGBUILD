@@ -1,0 +1,34 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='pacmerge'
+pkgver=1.0.2
+pkgrel=2
+pkgdesc="Merge or remove .pacnew files in your system"
+arch=('any')
+url="https://github.com/gauthier-voron/pacmerge"
+license=('GPL')
+groups=()
+depends=('perl' 'perl-file-which' 'diffutils' 'patch' 'findutils')
+makedepends=()
+checkdepends=()
+optdepends=('mlocate: find with locate'
+	    'emacs-nox: edit patches with emacs'
+	    'vim: edit patches with vim'
+	    'nano: edit patches with nano')
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=(
+"$srcdir/$pkgname::git+https://github.com/gauthier-voron/pacmerge#tag=1.0.2"
+)
+noextract=()
+md5sums=('SKIP')
+validpgpkeys=()
+
+package() {
+    install -d -m755 "$pkgdir/usr/bin"
+    install -m755 "$srcdir/$pkgname/pacmerge" "$pkgdir/usr/bin/pacmerge"
+}
