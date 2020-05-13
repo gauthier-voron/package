@@ -1,12 +1,12 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-desktop'
-pkgver=1.4
+pkgver=1.5
 pkgrel=1
 pkgdesc="Minimal configuration for desktop environment"
 arch=('any')
 url=""
 license=('unknown')
-groups=('config-laurier' 'config-orme' 'config-qemu')
+groups=('config-bouleau' 'config-laurier' 'config-orme' 'config-qemu')
 depends=('at' 'android-file-transfer'
 	 'bc'
 	 'cronie'
