@@ -1,12 +1,12 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-multimedia'
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Configuration for multimedia environment"
 arch=('any')
 url=""
 license=('unknown')
-groups=('config-laurier' 'config-orme')
+groups=('config-bouleau' 'config-laurier' 'config-orme')
 depends=('aspell' 'aspell-fr' 'audacity'
 	 'eog' 'evince'
 	 'ffmpeg' 'firefox' 'flashplugin'

@@ -1,12 +1,12 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-audio'
-pkgver=1.1
+pkgver=1.2
 pkgrel=1
 pkgdesc="Sound configuration for desktop environment"
 arch=('any')
 url=""
 license=('unknown')
-groups=('config-laurier' 'config-orme')
+groups=('config-bouleau' 'config-laurier' 'config-orme')
 depends=('alsa-utils' 'config-desktop' 'mpc' 'mpd' 'ncmpcpp' 'pulseaudio-alsa')
 source=('mpd.conf')
 md5sums=('2a3cc580de5a3a081c6f7dd7e14a5877')
