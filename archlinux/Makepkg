@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+#   A wrapper of makepkg to enable quiet build and change directory options.
+#   The syntax is:
+#
+#       Makepkg [--verbose] <directory> <makepkg-args...>
+#
+#   Change to <directory> before to call makepkg with the given <makepkg-args>.
+#   If --verbose is not specified, then print something only if something wrong
+#   happens (i.e. makepkg exits with failure).
+#
+
+# Get optional first --verbose argument.
+#
+if [ "x$1" = 'x--verbose' -o "x$1" = 'x-v' ] ; then
+    VERBOSE=1
+    shift
+else
+    VERBOSE=0
+fi
+
+# Get mandatory directory argument.
+#
+if [ "x$1" != 'x' ] ; then
+    DIRECTORY="$1"
+    shift
+else
+    exit 1
+fi
+
+
+# If verbose, change directory and execute as usual.
+#
+if [ ${VERBOSE} -eq 1 ] ; then
+    cd "${DIRECTORY}"
+    exec makepkg "$@"
+fi
+
+
+# Otherwise, create a log file, make sure it gets deleted on exit, then call
+# makepkg with redirected output.
+# If makepkg fail, then print the log.
+#
+LOGFILE="$(mktemp --suffix='.log' 'makepkg.XXXXXXXXXX')"
+
+if [ "${LOGFILE:0:1}" != '/' ] ; then
+    LOGFILE="${PWD}/${LOGFILE}"
+fi
+
+trap "rm '${LOGFILE}'" 'EXIT'
+
+cd "${DIRECTORY}"
+
+if ! makepkg --noconfirm "$@" > "${LOGFILE}" 2>&1 ; then
+    cat "${LOGFILE}"
+    exit 1
+fi

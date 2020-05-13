@@ -1,7 +1,7 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 
 pkgname='synctl-git'
-pkgver=r352.67e6b44
+pkgver=vcs
 pkgrel=1
 pkgdesc="A file backup and synchronization tool"
 arch=('any')

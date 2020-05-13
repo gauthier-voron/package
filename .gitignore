@@ -1,0 +1,8 @@
+archlinux/.build.d
+archlinux/.depends.d
+archlinux/.depends.mk
+archlinux/*.db
+archlinux/*.db.tar.gz
+archlinux/*.files
+archlinux/*.files.tar.gz
+archlinux/*.files.tar.gz.old
