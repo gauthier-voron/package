@@ -1,0 +1,21 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='setup-bouleau'
+pkgver=1.1
+pkgrel=1
+pkgdesc="Additional configuration specific to Bouleau"
+arch=('any')
+url=""
+license=('unknown')
+groups=('config-bouleau')
+depends=('xf86-video-intel')
+source=('10-keyboard.conf')
+md5sums=('2e87470dd37e34d2f9445848c3bfb118')
+
+package() {
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc"
+    echo 'Bouleau' > "$pkgdir/etc/hostname"
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/X11/xorg.conf.d"
+    install -m644 "$srcdir/10-keyboard.conf" \
+	    "$pkgdir/etc/X11/xorg.conf.d/10-keyboard.conf"
+}
