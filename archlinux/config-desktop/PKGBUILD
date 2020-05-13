@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-desktop'
-pkgver=1.2
+pkgver=1.4
 pkgrel=1
 pkgdesc="Minimal configuration for desktop environment"
 arch=('any')
@@ -17,6 +17,7 @@ depends=('at' 'android-file-transfer'
 	 'keepassxc'
 	 'lshw' 'lsof'
 	 'mlocate'
+	 'nano'
 	 'ntfs-3g'
 	 'openssh'
 	 'rsync'
@@ -27,10 +28,12 @@ depends=('at' 'android-file-transfer'
 install="$pkgname.install"
 source=('autologin@.service'
 	'privileged-users'
-	'system-commands')
+	'system-commands'
+	'user.slice')
 md5sums=('40571cc1a47fa0b0048eadb2be766d64'
 	 'edc597dfff8031da7c3c84732db9d4f2'
-	 '3f5d1be9431f6b10ce028dbba81b6e6d')
+	 '3f5d1be9431f6b10ce028dbba81b6e6d'
+	 'c6d1bad174078c4430b4af26f5e67d43')
 
 package() {
     install -o 0 -g 0 -d -m750 "$pkgdir/etc/sudoers.d"
@@ -41,4 +44,8 @@ package() {
     for file in 'autologin@.service' ; do
 	install -m644 "$srcdir/$file" "$pkgdir/usr/lib/systemd/system/$file"
     done
+
+    install -o 0 -g 0 -d -m755 "$pkgdir/etc/systemd/system/user.slice.d"
+    install -m644 "$srcdir/user.slice" \
+        "$pkgdir/etc/systemd/system/user.slice.d/override.conf"
 }
