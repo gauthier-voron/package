@@ -15,6 +15,7 @@ PACKAGES += emacs-go-mode
 PACKAGES += emacs-kotlin-mode
 PACKAGES += homectl
 PACKAGES += perl-synctl
+PACKAGES += setup-bouleau
 PACKAGES += setup-laurier
 PACKAGES += setup-orme
 PACKAGES += setup-qemu
