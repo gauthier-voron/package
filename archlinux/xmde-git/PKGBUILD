@@ -12,7 +12,9 @@ depends=('bash' 'dmenu' 'feh' 'imagemagick' 'perl' 'physlock' 'rxvt-unicode'
 	 'xmonad-contrib' 'xorg-server' 'xorg-xinit' 'xorg-xinput'
 	 'xorg-xprop' 'xorg-xrandr' 'xorg-xset')
 makedepends=('git')
-optdepends=('alsa-utils: volume control support' 'scrot: screenshot support')
+optdepends=('alsa-utils: volume control support'
+	    'scrot: screenshot support'
+	    'xf86-input-synaptics: touchpad control support')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 replaces=()
