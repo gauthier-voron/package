@@ -1,28 +1,28 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.3
-pkgrel=1
+pkgver=1.4
+pkgrel=2
 pkgdesc="Configuration for developping environment"
 arch=('any')
 url=""
 license=('unknown')
 groups=('config-laurier' 'config-orme')
 depends=('apache-ant' 'arch-install-scripts' 'archiso' 'autoconf' 'automake' 'aws-cli'
-	 'binutils' 'bison' 'bochs'
-	 'clisp' 'cmake' 'cpio' 'ctags'
-	 'discount' 'dos2unix' 'dosfstools'
+	 'bcprov' 'binutils' 'bison' 'bochs'
+	 'cabal-install' 'clisp' 'cmake' 'cpio' 'ctags'
+	 'dep' 'discount' 'dos2unix' 'dosfstools'
 	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-nox'
 	 'fakeroot' 'ffmpeg' 'file' 'findutils' 'flex'
 	 'gawk' 'gcc' 'gcc' 'gcc-ada' 'gcc-fortran' 'gdb' 'gettext' 'ghc' 'git' 'gnu-netcat' 'gnuplot' 'go' 'gprolog' 'grep' 'groff' 'gtest' 'gzip'
-	 'hexedit'
+	 'hexedit' 'hlint' 'hugo'
 	 'jdk-openjdk' 'junit'
 	 'libtool' 'ltrace'
 	 'm4' 'make' 'moreutils' 'mtools'
 	 'nmap'
 	 'ocaml' 'ocaml-compiler-libs' 'ocaml-findlib'
 	 'qemu'
-	 'pacman' 'patch' 'perf' 'pkgconf' 'python' 'python2'
-	 'sed' 'strace' 'subversion' 'syslinux'
+	 'pacman' 'patch' 'perf' 'pkgconf' 'protobuf' 'python' 'python-matplotlib' 'python2'
+	 'sed' 'sparsehash' 'strace' 'subversion' 'syslinux'
 	 'texinfo' 'texlive-core' 'texlive-fontsextra' 'texlive-genericextra' 'texlive-latexextra' 'texlive-science' 'time'
 	 'util-linux'
 	 'valgrind'
