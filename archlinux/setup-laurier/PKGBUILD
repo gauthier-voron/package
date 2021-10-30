@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='setup-laurier'
-pkgver=1.4
+pkgver=1.12
 pkgrel=1
 pkgdesc="Additional configuration specific to Laurier"
 arch=('any')
@@ -9,11 +9,13 @@ license=('unknown')
 groups=('config-laurier')
 depends=('terminus-font' 'xf86-input-synaptics')
 source=('10-keyboard.conf'
+	'10-screen.conf'
 	'70-synaptics.conf'
 	'90-no-touchscreen.conf'
 	'screen.conf'
 	'xmde-screen-resolution')
 md5sums=('2e87470dd37e34d2f9445848c3bfb118'
+	 '4159a3e4093264364e19f4b407de7264'
 	 'c5a1d3944c92241ff6bc2c4ad9a26748'
 	 'a52111ddfe326e96ffb0a08855f48fca'
 	 'b847176254ffa713ea207b63ca763f95'
@@ -34,6 +36,8 @@ package() {
     install -o 0 -g 0 -d -m755 "$pkgdir/etc/X11/xorg.conf.d"
     install -m644 "$srcdir/10-keyboard.conf" \
 	    "$pkgdir/etc/X11/xorg.conf.d/10-keyboard.conf"
+    install -m644 "$srcdir/10-screen.conf" \
+	    "$pkgdir/etc/X11/xorg.conf.d/10-screen.conf"
     install -m644 "$srcdir/70-synaptics.conf" \
 	    "$pkgdir/etc/X11/xorg.conf.d/70-synaptics.conf"
     install -m644 "$srcdir/90-no-touchscreen.conf" \
