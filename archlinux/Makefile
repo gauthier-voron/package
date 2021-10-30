@@ -61,7 +61,7 @@ endif
 # Selection on the Makefile mode based on its goals.
 # Only in build mode, we need to generate and include '.depends.mk'. This
 # file contains the paths of the actual package files to generate (the ones
-# ending with a '.pkg.tar.xz') and their dependencies.
+# ending with a '.pkg.tar.zst') and their dependencies.
 #
 
 config-goals := %.mk clean cleanall
@@ -157,7 +157,7 @@ $(REPOSITORY).files: $(REPOSITORY).db.tar.gz
 # The dependencies are defined in .depends.mk
 #
 
-$(package-files): %.pkg.tar.xz:
+$(package-files): %.pkg.tar.zst:
 	$(call cmd-print,  MAKEPKG $@)
 	$(Q)./Makepkg $(F) $(dir $@) -frs --noextract
 
@@ -190,11 +190,10 @@ $(OBJ)%.build/PKGBUILD:
 
 $(DEP)%.mk: $(OBJ)%.build/PKGBUILD | $(DEP)
 	$(call cmd-print,  DEP     $(strip $@))
-	$(Q)(cd $(dir $<) && makepkg --packagelist) | grep '.pkg.tar.xz$$' | \
+	$(Q)(cd $(dir $<) && makepkg --packagelist) | grep '.pkg.tar.zst$$' | \
          while read path ; do \
              path="$${path#$(PWD)/}" ; \
-             odir="$(patsubst $(OBJ)%.build/PKGBUILD, %, $<)" ; \
-             echo "$$path: \$$(wildcard $${odir}/*)" ; \
+             echo "$$path: $<" ; \
              echo "package-files += $$path" ; \
          done > $@
 
