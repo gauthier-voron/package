@@ -17,7 +17,6 @@ PACKAGES += config-multimedia
 PACKAGES += ec2tools
 PACKAGES += emacs-go-mode
 PACKAGES += emacs-kotlin-mode
-PACKAGES += homectl
 PACKAGES += pacmerge
 PACKAGES += perl-synctl
 PACKAGES += qmk-ergodox-leaf-git
@@ -26,6 +25,7 @@ PACKAGES += setup-laurier
 PACKAGES += setup-orme
 PACKAGES += setup-qemu
 PACKAGES += synctl-git
+PACKAGES += udctl
 PACKAGES += vpstools
 PACKAGES += xmde-git
 

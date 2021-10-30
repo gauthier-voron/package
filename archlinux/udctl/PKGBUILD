@@ -1,11 +1,11 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
-pkgname='homectl'
-pkgver=1.1
+pkgname='udctl'
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="Efficient organization of home directory"
 arch=('any')
 url=""
-license=('GPL')
+license=('GPL3')
 groups=()
 depends=()
 makedepends=()
@@ -13,17 +13,31 @@ checkdepends=()
 optdepends=()
 provides=()
 conflicts=()
-replaces=()
+replaces=('homectl')
 backup=()
 options=()
 install=
 changelog=
-source=('user-dirs.dirs')
+source=("$pkgname::git+https://github.com/gauthier-voron/udctl#tag=1.0.0"
+	'user-dirs.dirs')
 noextract=()
-md5sums=('SKIP')
+md5sums=('SKIP' 'SKIP')
 validpgpkeys=()
 
+check() {
+    cd "$srcdir/$pkgname"
+
+    make test
+}
+
 package() {
+    cd "$srcdir/$pkgname"
+
+    make install PREFIX="$pkgdir/"
+
+
+    cd "$srcdir"
+
     install -d -m755 "$pkgdir/etc/skel"
 
     for dir in 'archive' 'download' 'model' 'project' \
@@ -37,6 +51,5 @@ package() {
     done
 
     install -d -m755 "$pkgdir/etc/skel/.config"
-    install -m644 "$srcdir/user-dirs.dirs" \
-	    "$pkgdir/etc/skel/.config/user-dirs.dirs"
+    install -m644 "user-dirs.dirs" "$pkgdir/etc/skel/.config/user-dirs.dirs"
 }
