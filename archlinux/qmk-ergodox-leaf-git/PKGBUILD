@@ -1,0 +1,49 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='qmk-ergodox-leaf-git'
+pkgver=vcs
+pkgrel=1
+pkgdesc="A layout for the Ergodox EZ Glow keyboard"
+arch=('any')
+url="https://github.com/gauthier-voron/qmk-ergodox-leaf.git"
+license=('GPL')
+groups=()
+depends=('teensy-loader-cli')
+makedepends=('git' 'make' 'qmk')
+provides=('qmk-ergodox-leaf')
+conflicts=('qmk-ergodox-leaf')
+replaces=()
+backup=()
+options=()
+install=
+source=(
+    "$pkgname::git+https://github.com/gauthier-voron/qmk-ergodox-leaf#branch=develop"
+    'update-keyboard'
+)
+noextract=()
+md5sums=('SKIP'
+	 '4c77cdeb5bfd389649683c17a8ba46b9')
+
+pkgver() {
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "$srcdir/$pkgname"
+
+    CPPFLAGS=
+    CFLAGS=
+
+    make git-submodule
+    make ergodox_ez:leaf
+}
+
+package() {
+    cd "$srcdir/$pkgname"
+
+    mkdir -p "$pkgdir/usr/bin/"
+    install -m755 "$srcdir/update-keyboard" "$pkgdir/usr/bin/update-keyboard"
+
+    mkdir -p "$pkgdir/usr/lib/firmware/"
+    install -m644 "$srcdir/$pkgname/.build/ergodox_ez_leaf.hex" \
+        "$pkgdir/usr/lib/firmware/ergodox_ez_leaf.hex"
+}

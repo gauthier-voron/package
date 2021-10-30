@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+#   Load keyboard firmware into keyboard as soon as it enters in bootloader
+#   mode. In bootloader mode, the keyboard is unusable until an update occurs.
+#   For this reason, this script repeatedly tries to update the firmware until
+#   success.
+#
+
+MCU='atmega32u4'
+HEX='/usr/lib/firmware/ergodox_ez_leaf.hex'
+MSG=1
+
+if [ ! -e "${HEX}" ] ; then
+    echo "Cannot find firmware '${HEX}'" >&2
+    exit 1
+fi
+
+while ! teensy-loader-cli --mcu="${MCU}" "${HEX}" 2>&1 ; do
+    if [ ${MSG} -eq 1 ] ; then
+	echo "Update ready, put keyboard in bootleader mode"
+	MSG=0
+    fi
+
+    sleep 1
+done | grep -v -e '^Unable to open device$' -e '^$'

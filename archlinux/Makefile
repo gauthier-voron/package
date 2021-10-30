@@ -20,6 +20,7 @@ PACKAGES += emacs-kotlin-mode
 PACKAGES += homectl
 PACKAGES += pacmerge
 PACKAGES += perl-synctl
+PACKAGES += qmk-ergodox-leaf-git
 PACKAGES += setup-bouleau
 PACKAGES += setup-laurier
 PACKAGES += setup-orme

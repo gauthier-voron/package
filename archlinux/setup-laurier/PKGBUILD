@@ -7,7 +7,9 @@ arch=('any')
 url=""
 license=('unknown')
 groups=('config-laurier')
-depends=('terminus-font' 'xf86-input-synaptics')
+depends=('qmk-ergodox-leaf-git'
+	 'terminus-font'
+	 'xf86-input-synaptics')
 source=('10-keyboard.conf'
 	'10-screen.conf'
 	'70-synaptics.conf'
