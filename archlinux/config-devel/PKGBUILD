@@ -1,13 +1,13 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.4
-pkgrel=2
+pkgver=1.5
+pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
 url=""
 license=('unknown')
 groups=('config-laurier' 'config-orme')
-depends=('apache-ant' 'arch-install-scripts' 'archiso' 'autoconf' 'automake' 'aws-cli'
+depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'automake' 'aws-cli'
 	 'bcprov' 'binutils' 'bison' 'bochs'
 	 'cabal-install' 'clisp' 'cmake' 'cpio' 'ctags'
 	 'dep' 'discount' 'dos2unix' 'dosfstools'

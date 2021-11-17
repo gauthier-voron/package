@@ -9,6 +9,7 @@ REPOSITORY := mnesic
 # Name of the packages to build.
 # These must be names of the directories containing a PKGBUILD file.
 #
+PACKAGES += asmex
 PACKAGES += config-audio
 PACKAGES += config-desktop
 PACKAGES += config-devel

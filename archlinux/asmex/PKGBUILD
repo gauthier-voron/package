@@ -1,0 +1,44 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='asmex'
+pkgver=1.1.0
+pkgrel=1
+pkgdesc="Show assembly and source code correspondance"
+arch=('any')
+url="https://github.com/gauthier-voron/asmex"
+license=('GPL')
+groups=()
+depends=('perl' 'perl-curses-ui' 'binutils')
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=(
+    "$srcdir/$pkgname::git+https://github.com/gauthier-voron/asmex#tag=1.1.0"
+)
+noextract=()
+md5sums=('SKIP')
+validpgpkeys=()
+
+package() {
+    install -d -m755 "$pkgdir/usr/bin"
+    install -m755 "$srcdir/asmex/asmex" "$pkgdir/usr/bin/asmex"
+
+    install -d -m755 "$pkgdir/usr/share/perl5/vendor_perl/Curses/UI"
+    install -m644 "$srcdir/asmex/Curses/UI/CodeViewer.pm" \
+	    "$pkgdir/usr/share/perl5/vendor_perl/Curses/UI/CodeViewer.pm"
+
+    install -d -m755 "$pkgdir/usr/share/perl5/vendor_perl/Asmex"
+    install -m644 "$srcdir/asmex/Asmex/Object.pm" \
+	    "$pkgdir/usr/share/perl5/vendor_perl/Asmex/Object.pm"
+
+    gzip "$srcdir/asmex/asmex.1"
+    install -d -m755 "$pkgdir/usr/share/man/man1"
+    install -m644 "$srcdir/asmex/asmex.1.gz" \
+	    "$pkgdir/usr/share/man/man1/asmex.1.gz"
+}
