@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.5
+pkgver=1.6
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -17,7 +17,7 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'hexedit' 'hlint' 'hugo'
 	 'jdk-openjdk' 'junit'
 	 'libtool' 'ltrace'
-	 'm4' 'make' 'moreutils' 'mtools'
+	 'm4' 'make' 'mercurial' 'moreutils' 'mtools'
 	 'nmap'
 	 'ocaml' 'ocaml-compiler-libs' 'ocaml-findlib'
 	 'qemu'
