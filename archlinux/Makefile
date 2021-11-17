@@ -29,6 +29,13 @@ PACKAGES += udctl
 PACKAGES += vpstools
 PACKAGES += xmde-git
 
+# Name of the remote packages from AUR.
+#
+RPACKAGES += davmail
+RPACKAGES += qmk
+RPACKAGES += transset-df
+RPACKAGES += zoom
+
 # URL of the server to push the repository as well as the path inside the
 # server.
 SERVERPATH := /srv/http/pkg.gauthiervoron.net/archlinux/x86_64
