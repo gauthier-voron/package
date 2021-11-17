@@ -64,7 +64,7 @@ endif
 # ending with a '.pkg.tar.zst') and their dependencies.
 #
 
-config-goals := %.mk clean cleanall
+config-goals := %.mk clean cleanall update-remotes $(OBJ)%.remote
 
 ifeq ($(filter $(config-goals), $(MAKECMDGOALS)),)
   mode := build
@@ -133,6 +133,22 @@ push: $(REPOSITORY).db.tar.gz $(REPOSITORY).db $(REPOSITORY).files.tar.gz \
         chmod 711 "$$dir" ; \
         rsync -aAHX --delete "$$dir/" "$(SERVER)/" ; \
         rm -rf "$$dir"
+
+
+# Update or download all the remote packages and ask for human validation.
+# This action is independant from the main building process and must be run
+# on its own.
+#
+
+update-remotes: $(patsubst %, $(OBJ)%.remote, $(RPACKAGES))
+
+.PHONY: FORCE-UPDATE
+
+FORCE-UPDATE:
+
+$(OBJ)%.remote: FORCE-UPDATE | $(OBJ)
+	$(call cmd-print,  UPDATE  $@)
+	$(Q)./Update $(F) $(patsubst $(OBJ)%.remote, %, $@) $@ || true
 
 
 # Repository related rules.
@@ -225,6 +241,24 @@ $(foreach package, $(PACKAGES), \
   $(eval $(call PACKAGE-TEMPLATE, $(package))))
 
 
+# Generate the dependency rules for remote package $(OBJ) copy build
+# directories.
+#
+
+define RPACKAGE-TEMPLATE
+
+  $$(OBJ)$(strip $(1)).build/PKGBUILD: \
+                                   $$(OBJ)$(strip $(1)).remote/PKGBUILD \
+                                   $$(wildcard $$(OBJ)$(strip $(1)).remote/*) \
+                                 | $$(OBJ)
+
+  .depends.mk: $$(DEP)$(strip $(1)).mk
+
+endef
+
+$(foreach package, $(RPACKAGES), \
+  $(eval $(call RPACKAGE-TEMPLATE, $(package))))
+
 
 $(DEP) $(OBJ):
 	$(call cmd-print,  MKDIR   $(strip $@))
@@ -251,6 +285,6 @@ cleanall:
             2> /dev/null || true
 
 
-.PHONY: default all push clean cleanall
+.PHONY: default all push clean cleanall update-remotes
 
 endif

@@ -1,0 +1,206 @@
+#!/bin/bash
+#
+#   Clone or update a package from the AUR and ask for a human review.
+#   Ask for the human review only if the package changed since the last
+#   review.
+#   The review consists in launching an interactive shell and ask the user to
+#   invoke a specific 'accept' command if the package is good to go.
+#
+
+
+AURURL='https://aur.archlinux.org/'
+
+# Get optional first --verbose argument.
+#
+if [ "x$1" = 'x--verbose' -o "x$1" = 'x-v' ] ; then
+    VERBOSE=1
+    shift
+else
+    VERBOSE=0
+fi
+
+# Get mandatory package name argument.
+#
+if [ "x$1" != 'x' ] ; then
+    PACKAGE="$1"
+    shift
+else
+    exit 1
+fi
+
+# Get optional directory argument.
+# If not specified, the directory equals the package name.
+#
+if [ "x$1" != 'x' ] ; then
+    DIRECTORY="$1"
+    shift
+else
+    DIRECTORY="${PACKAGE}"
+fi
+
+
+# Ask for a user review.
+# Start an interactive shell $SHELL which provide two special commands: accept
+# and reject.
+# Prompt a message containing the specified argumemt if any before to start
+# the shell.
+# Return true if the user invoke 'accept' before exiting the shell, false
+# otherwise.
+#
+review() {
+    local msg="$1" ; shift
+    local tempbin
+
+    (
+	temp="$(mktemp -d --tmp --suffix='.d' 'package-update.XXXXXXXXX')"
+	trap "rm -rf '${temp}'" INT QUIT TERM EXIT
+
+	echo 0 > "${temp}/answer"
+
+	cat > "${temp}/accept" <<EOF
+#!/bin/bash
+target="\${0%/*}/answer"
+echo 1 > "\${target}"
+printf "The review decision is now \033[32;1maccept\033[0m.\n"
+printf "You can now exit your shell to terminate the review.\n"
+EOF
+
+	cat > "${temp}/reject" <<EOF
+#!/bin/bash
+target="\${0%/*}/answer"
+echo 0 > "\${target}"
+printf "The review decision is now \033[31;1mreject\033[0m.\n"
+printf "You can now exit your shell to terminate the review.\n"
+EOF
+
+	chmod 755 "${temp}/accept" "${temp}/reject"
+
+	export PATH="${temp}":"${PATH}"
+
+	if [ "x${msg}" != 'x' ] ; then
+	    printf "\033[34;1m::\033[0;1m %s\033[0m\n" "$msg"
+	fi
+
+	printf "Invoke command '\033[32;1maccept\033[0m' to indicate the package is safe. You can cancel this\n"
+	printf "decision by invoking '\033[31;1mreject\033[0m'. Terminate the review by exiting the shell.\n"
+
+	"$SHELL"
+
+	if [ "x$(cat "${temp}/answer")" = 'x1' ] ; then
+	    exit 0
+	else
+	    exit 1
+	fi
+    )
+
+    return $?
+}
+
+# Update the git repository in the specified directory.
+# If the package was not already at its last version, then ask for a human
+# review by changing directory to the package and calling review().
+# If the review fails (the user does not validate the package) then rollback
+# the git repository to the previous version.
+#
+update() {
+    local dir="$1" ; shift
+    local old new opt
+
+    if [ ! -t 1 ] ; then
+	echo "Require human review but stdout is not interactive" >&2
+	exit 1
+    fi
+
+    if [ ${VERBOSE} -eq 0 ] ; then
+	opt=--quiet
+    fi
+
+    (
+	cd "${dir}"
+
+	old="$(git rev-parse HEAD)"
+
+	if [ "x${old}" = 'x' ] ; then
+	    echo "Cannot get current commit in '${dir}'" >&2
+	    exit 1
+	fi
+
+	if ! git pull $opt --no-rebase origin master ; then
+	    echo "Cannot update '$(git remote get-url origin)'" >&2
+	    exit 1
+	fi
+
+	new="$(git rev-parse HEAD)"
+
+	if [ "x${new}" = 'x' ] ; then
+	    echo "Cannot get new commit in '${dir}'" >&2
+	    git checkout "${old}"
+	    exit 1
+	fi
+
+	if [ "${old}" = "${new}" ] ; then
+	    # No change
+	    exit 0
+	fi
+
+	if ! review "Human review required, change since commit ${old}"
+	then
+	    git checkout "${old}"
+	    exit 1
+	fi
+
+	exit 0
+    )
+
+    return $?
+}
+
+# Clone a package with the given name from the AUR into the given directory,
+# Ask for a review of the cloned package by changing directory to the specified
+# directory and calling review().
+# If the review fails, delete the cloned directory.
+#
+clone() {
+    local name="$1" ; shift
+    local dir="$1" ; shift
+    local answer opt
+
+    if [ ! -t 1 ] ; then
+	echo "Require human review but stdout is not interactive" >&2
+	exit 1
+    fi
+
+    if [ ${VERBOSE} -eq 0 ] ; then
+	opt=--quiet
+    fi
+
+    if ! git clone $opt "${AURURL}/${name}.git" "${dir}" ; then
+	echo "Cannot clone '${AURURL}/${name}.git'" >&2
+	exit 1
+    fi
+
+    (
+	cd "${dir}"
+	review "Human review required for package '${name}'."
+	exit $?
+    )
+
+    answer=$?
+
+    if [ $answer -ne 0 ] ; then
+	rm -rf "${dir}"
+	exit 1
+    fi
+}
+
+# If the directory already exists, then try to update it.
+# Otherwise clone the package from the AUR repository.
+#
+if [ -d "${DIRECTORY}" ] ; then
+    update "${DIRECTORY}"
+elif [ -e "${DIRECTORY}" ] ; then
+    echo "Cannot clone '${DIRECTORY}': already exist" >&2
+    exit 1
+else
+    clone "${PACKAGE}" "${DIRECTORY}"
+fi
