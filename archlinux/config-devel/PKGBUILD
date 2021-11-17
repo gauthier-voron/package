@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.10
+pkgver=1.11
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
