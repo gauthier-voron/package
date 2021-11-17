@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.9
+pkgver=1.10
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -21,7 +21,7 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'nmap' 'nodejs' 'npm'
 	 'ocaml' 'ocaml-compiler-libs' 'ocaml-findlib'
 	 'qemu'
-	 'pacman' 'patch' 'perf' 'pkgconf' 'protobuf' 'python' 'python-matplotlib' 'python2'
+	 'pacman' 'patch' 'perf' 'perl-curses-ui' 'perl-json' 'pkgconf' 'protobuf' 'python' 'python-matplotlib' 'python2'
 	 'sed' 'sparsehash' 'strace' 'subversion' 'syslinux'
 	 'texinfo' 'texlive-core' 'texlive-fontsextra' 'texlive-genericextra' 'texlive-latexextra' 'texlive-science' 'time'
 	 'util-linux'
