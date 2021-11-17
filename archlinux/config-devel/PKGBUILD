@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.6
+pkgver=1.7
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -11,7 +11,7 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'bcprov' 'binutils' 'bison' 'bochs'
 	 'cabal-install' 'clisp' 'cmake' 'cpio' 'ctags'
 	 'dep' 'discount' 'dos2unix' 'dosfstools'
-	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-nox'
+	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-nox' 'erlang'
 	 'fakeroot' 'ffmpeg' 'file' 'findutils' 'flex'
 	 'gawk' 'gcc' 'gcc' 'gcc-ada' 'gcc-fortran' 'gdb' 'gettext' 'ghc' 'git' 'gnu-netcat' 'gnuplot' 'go' 'gprolog' 'grep' 'groff' 'gtest' 'gzip'
 	 'hexedit' 'hlint' 'hugo'
