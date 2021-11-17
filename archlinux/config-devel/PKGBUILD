@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.14
+pkgver=1.15
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -9,21 +9,22 @@ license=('unknown')
 groups=('config-laurier' 'config-orme')
 depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'automake' 'aws-cli'
 	 'bcprov' 'binutils' 'bison' 'bochs'
-	 'cabal-install' 'clisp' 'coq' 'cmake' 'cpio' 'ctags'
+	 'cabal-install' 'clisp' 'cloc' 'coq' 'cmake' 'cpio' 'ctags'
 	 'discount' 'dos2unix' 'dosfstools'
 	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-nox' 'erlang'
 	 'fakeroot' 'ffmpeg' 'file' 'findutils' 'flex'
 	 'gawk' 'gcc' 'gcc-ada' 'gcc-fortran' 'gdb' 'gettext' 'ghc' 'git' 'gnu-netcat' 'gnuplot' 'go' 'gprolog' 'grep' 'groff' 'gtest' 'gzip'
 	 'hexedit' 'hlint' 'hugo'
+	 'icedtea-web' 'ipmitool'
 	 'jdk-openjdk' 'junit'
 	 'libtool' 'ltrace'
 	 'm4' 'make' 'mercurial' 'moreutils' 'mtools'
 	 'nmap' 'nodejs' 'npm'
 	 'ocaml' 'ocaml-compiler-libs' 'ocaml-findlib'
-	 'qemu'
+	 'qemu' 'qmk'
 	 'pacman' 'patch' 'perf' 'perl-curses-ui' 'perl-json' 'pkgconf' 'protobuf' 'python' 'python-matplotlib' 'python2'
 	 'sed' 'sparsehash' 'strace' 'subversion' 'syslinux'
-	 'texinfo' 'texlive-core' 'texlive-fontsextra' 'texlive-genericextra' 'texlive-latexextra' 'texlive-science' 'time'
+	 'texinfo' 'texlive-core' 'texlive-fontsextra' 'texlive-genericextra' 'texlive-latexextra' 'texlive-science' 'time' 'tk' 'traceroute'
 	 'util-linux'
 	 'valgrind'
 	 'which')
