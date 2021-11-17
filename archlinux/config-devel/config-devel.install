@@ -8,4 +8,19 @@ post_install() {
 	    printf "export EDITOR=emacs"
 	} >> '/etc/skel/.zshrc.local'
     fi
+
+    # Enable multicore make for makepkg if not already set
+    if ! grep -Pq '^MAKEFLAGS=' '/etc/makepkg.conf' ; then
+	cores=$(cat /proc/cpuinfo | grep processor | wc -l)
+	if grep -Pq '^#MAKEFLAGS=' '/etc/makepkg.conf' ; then
+	    sed -ri 's/^#MAKEFLAGS=.*/MAKEFLAGS="-j'"${cores}"'"/' \
+		'/etc/makepkg.conf'
+	else
+	    {
+		echo
+		echo "#-- Make Flags"
+		echo 'MAKEFLAGS="-j'"${cores}"'2"'
+	    } >> '/etc/makepkg.conf'
+	fi
+    fi
 }
