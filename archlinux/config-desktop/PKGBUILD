@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-desktop'
-pkgver=1.7
+pkgver=1.8
 pkgrel=1
 pkgdesc="Minimal configuration for desktop environment"
 arch=('any')
@@ -17,7 +17,7 @@ depends=('at' 'android-file-transfer'
 	 'keepassxc'
 	 'lshw' 'lsof'
 	 'man-db' 'man-pages' 'mlocate'
-	 'nano' 'networkmanager-openconnect' 'ntfs-3g'
+	 'nano' 'openconnect' 'ntfs-3g'
 	 'openssh'
 	 'pacman-contrib' 'pacmerge'
 	 'rsync'
