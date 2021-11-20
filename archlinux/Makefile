@@ -15,7 +15,6 @@ PACKAGES += config-desktop
 PACKAGES += config-devel
 PACKAGES += config-graphic
 PACKAGES += config-multimedia
-PACKAGES += ec2tools
 PACKAGES += emacs-go-mode
 PACKAGES += emacs-kotlin-mode
 PACKAGES += emacs-modern-c++-mode-git

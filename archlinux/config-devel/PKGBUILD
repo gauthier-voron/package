@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.16
+pkgver=1.18
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -11,13 +11,13 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'bcprov' 'binutils' 'bison' 'bochs'
 	 'cabal-install' 'clisp' 'cloc' 'coq' 'cmake' 'cpio' 'ctags'
 	 'discount' 'dos2unix' 'dosfstools'
-	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-modern-c++-mode-git' 'emacs-nox' 'erlang'
+	 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-modern-c++-mode-git' 'emacs-nox' 'erlang'
 	 'fakeroot' 'ffmpeg' 'file' 'findutils' 'flex'
 	 'gawk' 'gcc' 'gcc-ada' 'gcc-fortran' 'gdb' 'gettext' 'ghc' 'git' 'gnu-netcat' 'gnuplot' 'go' 'gprolog' 'grep' 'groff' 'gtest' 'gzip'
 	 'hexedit' 'hlint' 'hugo'
 	 'icedtea-web' 'ipmitool'
 	 'jdk-openjdk' 'junit'
-	 'libtool' 'ltrace'
+	 'libbls' 'libtool' 'ltrace'
 	 'm4' 'make' 'mercurial' 'moreutils' 'mtools'
 	 'nmap' 'nodejs' 'npm'
 	 'ocaml' 'ocaml-compiler-libs' 'ocaml-findlib'
