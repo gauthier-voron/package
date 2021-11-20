@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-desktop'
-pkgver=1.9
+pkgver=1.10
 pkgrel=1
 pkgdesc="Minimal configuration for desktop environment"
 arch=('any')
@@ -23,7 +23,7 @@ depends=('at' 'android-file-transfer'
 	 'rsync'
 	 'sshfs' 'sudo'
 	 'testdisk'
-	 'unzip'
+	 'unzip' 'usbutils'
 	 'wget'
 	 'zip' 'zsh')
 install="$pkgname.install"
