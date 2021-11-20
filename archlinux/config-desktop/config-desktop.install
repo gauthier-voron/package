@@ -1,13 +1,13 @@
 post_install() {
     # Setup time, date and locale ---------------------------------------------
-    timedatectl set-timezone 'Australia/Sydney'
+    timedatectl set-timezone 'Europe/Zurich'
     hwclock --systohc
 
     sed -ri 's/^([^#].*)$/#\1/' '/etc/locale.gen'
-    sed -ri 's/^#(en_AU.UTF-8 UTF-8.*)$/\1/' '/etc/locale.gen'
+    sed -ri 's/^#(fr_CH.UTF-8 UTF-8.*)$/\1/' '/etc/locale.gen'
     locale-gen
 
-    echo "LANG=en_AU.UTF-8" > '/etc/locale.conf'
+    echo "LANG=fr_CH.UTF-8 UTF-8" > '/etc/locale.conf'
 
     # Setup shell config ------------------------------------------------------
     chsh -s '/usr/bin/zsh'
