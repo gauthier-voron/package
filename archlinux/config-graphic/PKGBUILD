@@ -1,13 +1,13 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-graphic'
-pkgver=1.4
+pkgver=1.5
 pkgrel=1
 pkgdesc="Graphical configuration for desktop environment"
 arch=('any')
 url=""
 license=('unknown')
 groups=('config-bouleau' 'config-laurier' 'config-orme' 'config-qemu')
-depends=('xmde')
+depends=('xclip' 'xmde')
 install="$pkgname.install"
 source=('archlinux-wallpaper-1366x768.png'
 	'archlinux-wallpaper-1920x1080.png'
