@@ -8,9 +8,10 @@ url="https://github.com/gauthier-voron/xmde"
 license=('GPL')
 groups=()
 depends=('bash'
-	 'dmenu'
+	 'dmenu' 'dunst'
 	 'feh'
 	 'imagemagick'
+	 'libnotify'
 	 'perl' 'physlock'
 	 'rxvt-unicode'
 	 'transset-df' 'ttf-liberation'
