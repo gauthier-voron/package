@@ -44,12 +44,6 @@ SERVERPATH := /srv/http/pkg.gauthiervoron.net/archlinux/x86_64
 SERVER     := package@pkg.gauthiervoron.net:$(SERVERPATH)
 
 
-# Be sure that in case of reccursive call, we do not make anoying printings.
-# Also, we do not use builtin variables or rules, so discard them for saftey.
-#
-MAKEFLAGS += --no-builtin-rules --no-builtin-variables --no-print-directory
-
-
 # Verbosity level control:
 #   0 - only print errors
 #   1 - pretty print what is being done but keep it concise
