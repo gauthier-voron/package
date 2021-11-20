@@ -1,0 +1,31 @@
+# Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
+pkgname='emacs-modern-c++-mode-git'
+pkgver=vcs
+pkgrel=1
+pkgdesc="Modern C++ mode package for Emacs"
+arch=('any')
+url="https://github.com/ludwigpacifici/modern-cpp-font-lock"
+license=('GPL3')
+groups=()
+depends=()
+makedepends=('git')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+replaces=()
+backup=()
+options=()
+install=
+source=("$pkgname::git+${url}#branch=master")
+noextract=()
+md5sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/$pkgname"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+    install -o 0 -g 0 -m755 -d "$pkgdir/usr/share/emacs/site-lisp/"
+    install -o 0 -g 0 -m644 "$srcdir/$pkgname/modern-cpp-font-lock.el" \
+	    "$pkgdir/usr/share/emacs/site-lisp/modern-cpp-font-lock.el"
+}
