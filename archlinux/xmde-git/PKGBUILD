@@ -7,10 +7,15 @@ arch=('any')
 url="https://github.com/gauthier-voron/xmde"
 license=('GPL')
 groups=()
-depends=('bash' 'dmenu' 'feh' 'imagemagick' 'perl' 'physlock' 'rxvt-unicode'
-	 'transset-df' 'ttf-liberation' 'xcompmgr' 'xmobar' 'xmonad'
-	 'xmonad-contrib' 'xorg-server' 'xorg-xinit' 'xorg-xinput'
-	 'xorg-xprop' 'xorg-xrandr' 'xorg-xset')
+depends=('bash'
+	 'dmenu'
+	 'feh'
+	 'imagemagick'
+	 'perl' 'physlock'
+	 'rxvt-unicode'
+	 'transset-df' 'ttf-liberation'
+	 'xcompmgr' 'xmobar' 'xmonad' 'xmonad-contrib' 'xorg-server'
+	 'xorg-xinit' 'xorg-xinput' 'xorg-xprop' 'xorg-xrandr' 'xorg-xset')
 makedepends=('git')
 optdepends=('alsa-utils: volume control support'
 	    'scrot: screenshot support')
