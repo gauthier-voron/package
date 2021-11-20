@@ -1,0 +1,53 @@
+# Maintainer: Gauthier Voron <gauthier.voron@epfl.ch>
+pkgname='libbls'
+pkgver='1.19'
+pkgrel=3
+epoch=
+pkgdesc="BLS signatures and multisignatures"
+arch=('x86_64')
+url='https://github.com/herumi/bls'
+license=('BSD')
+groups=()
+depends=()
+makedepends=('gcc' 'git' 'make')
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("$srcdir/$pkgname::git+$url#tag=v$pkgver"
+	"$srcdir/mcl::git+https://github.com/herumi/mcl#commit=f796cfc915e439eb4fd89082a9596b092a31dd9e")
+noextract=()
+md5sums=('SKIP' 'SKIP')
+validpgpkeys=()
+
+prepare() {
+    cd "$srcdir/$pkgname"
+
+    git submodule init
+    git config submodule.mcl.url "$srcdir/mcl"
+    git submodule update
+}
+
+build() {
+    cd "$srcdir/$pkgname"
+
+    make all
+}
+
+check() {
+    cd "$srcdir/$pkgname"
+
+    make test
+}
+
+package() {
+    cd "$srcdir/$pkgname"
+
+    make install PREFIX="$pkgdir/usr"
+    make -C 'mcl' install PREFIX="$pkgdir/usr"
+}

@@ -19,6 +19,7 @@ PACKAGES += ec2tools
 PACKAGES += emacs-go-mode
 PACKAGES += emacs-kotlin-mode
 PACKAGES += emacs-modern-c++-mode-git
+PACKAGES += libbls
 PACKAGES += pacmerge
 PACKAGES += perl-synctl
 PACKAGES += qmk-ergodox-leaf-git
