@@ -40,6 +40,7 @@ RPACKAGES += zoom
 
 # URL of the server to push the repository as well as the path inside the
 # server.
+#
 SERVERPATH := /srv/http/pkg.gauthiervoron.net/archlinux/x86_64
 SERVER     := package@pkg.gauthiervoron.net:$(SERVERPATH)
 
@@ -225,7 +226,7 @@ $(DEP)%.mk: $(OBJ)%.build/PKGBUILD | $(DEP)
 	$(Q)cat $^ > $@
 
 
-# Generate the dependency rules for $(OBJ) copy build directories.
+# Generate the dependency rules for package $(OBJ) copy build directories.
 # A build directory depends on all the source files located in the package
 # directory.
 #
