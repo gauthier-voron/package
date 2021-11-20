@@ -1,6 +1,6 @@
 # Maintainer: Gauthier <gauthier.voron@sydney.edu.au>
 pkgname='ec2tools'
-pkgver=2.1.1
+pkgver=2.3.0
 pkgrel=1
 pkgdesc="Easy manipulation of AWS EC2 instances from shell"
 arch=('x86_64')
@@ -15,7 +15,7 @@ replaces=()
 backup=()
 options=()
 install=
-source=('ec2tools::git+https://hades.it.usyd.edu.au/gauthier/ec2tools.git#tag=v2.1.1')
+source=('ec2tools::git+https://hades.it.usyd.edu.au/gauthier/ec2tools.git#tag=v2.3.0')
 noextract=()
 md5sums=('SKIP')
 
