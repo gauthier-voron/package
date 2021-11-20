@@ -2,7 +2,7 @@
 
 pkgname='synctl-git'
 pkgver=vcs
-pkgrel=1
+pkgrel=2
 pkgdesc="A file backup and synchronization tool"
 arch=('any')
 url="https://github.com/gauthier-voron/synctl"
@@ -42,8 +42,6 @@ package() {
     cd "$srcdir/$pkgname"
 
     make install PREFIX="$pkgdir/"
-    mkdir -p "$pkgdir/usr/share/license/synctl"
-    cp "$srcdir/$pkgname/COPYING" "$pkgdir/usr/share/license/synctl/COPYING"
 }
 
 # vim:set ts=2 sw=2 et:
