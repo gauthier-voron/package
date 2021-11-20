@@ -1,6 +1,6 @@
 # Maintainer: Gauthier Voron <gauthier.voron@mnesic.fr>
 pkgname='config-devel'
-pkgver=1.15
+pkgver=1.16
 pkgrel=1
 pkgdesc="Configuration for developping environment"
 arch=('any')
@@ -11,7 +11,7 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'bcprov' 'binutils' 'bison' 'bochs'
 	 'cabal-install' 'clisp' 'cloc' 'coq' 'cmake' 'cpio' 'ctags'
 	 'discount' 'dos2unix' 'dosfstools'
-	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-nox' 'erlang'
+	 'ec2tools' 'emacs-go-mode' 'emacs-haskell-mode' 'emacs-kotlin-mode' 'emacs-lua-mode' 'emacs-modern-c++-mode-git' 'emacs-nox' 'erlang'
 	 'fakeroot' 'ffmpeg' 'file' 'findutils' 'flex'
 	 'gawk' 'gcc' 'gcc-ada' 'gcc-fortran' 'gdb' 'gettext' 'ghc' 'git' 'gnu-netcat' 'gnuplot' 'go' 'gprolog' 'grep' 'groff' 'gtest' 'gzip'
 	 'hexedit' 'hlint' 'hugo'
@@ -30,7 +30,7 @@ depends=('apache-ant' 'arch-install-scripts' 'archiso' 'asmex' 'autoconf' 'autom
 	 'which')
 install="$pkgname.install"
 source=('emacs-config.el')
-md5sums=('6f21c556f1027cde6d3018c35a3dbf18')
+md5sums=('3171c0e370ba16185ae21ec111f748c1')
 
 package() {
     install -o 0 -g 0 -m755 -d "$pkgdir/usr/share/emacs/site-lisp"

@@ -43,6 +43,10 @@
 (autoload 'lua-mode "lua-mode" nil t)
 (add-to-list 'auto-mode-alist '("\.lua$" . lua-mode))
 
+;; Add C++ modern mode
+(require 'modern-cpp-font-lock)
+(modern-c++-font-lock-global-mode t)
+
 
 ;;; Per mode Emacs behavior
 ;;; Settings in this section modify the behavior of Emacs depending on the used
