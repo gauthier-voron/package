@@ -21,7 +21,7 @@ md5sums=('2e87470dd37e34d2f9445848c3bfb118'
 	 'c5a1d3944c92241ff6bc2c4ad9a26748'
 	 'a52111ddfe326e96ffb0a08855f48fca'
 	 '3866086e6af5e3528a66eff492f2f4dd'
-	 'b847176254ffa713ea207b63ca763f95')
+	 'fa9cd5a48bb76aa63f97f11ebfec03fa')
 
 package() {
     install -o 0 -g 0 -d -m755 "$pkgdir/etc"
